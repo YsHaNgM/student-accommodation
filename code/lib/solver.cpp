@@ -1,6 +1,6 @@
 #include "solver.h"
 // temp
-// #include <iostream>
+#include <iostream>
 namespace sas
 {
     void solver::get_degree_m()
@@ -32,9 +32,21 @@ namespace sas
         // std::cout << "Here is the matrix m:\n"
         //           << adj_m << std::endl;
     }
-    std::vector<size_t> allocation()
+    std::vector<size_t> solver::allocation()
     {
-        ;
+        lap_m = degree_m - adj_m;
+        // std::cout << lap_m.rows() << ' ' << lap_m.cols() << std::endl;
+        // std::cout << "Here is the matrix m:\n"
+        //           << lap_m << std::endl;
+        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eigensolver(lap_m.cast<float>());
+        if (eigensolver.info() != Eigen::Success)
+            abort();
+        std::cout << "The eigenvalues of lap_m are:\n"
+                  << eigensolver.eigenvalues() << std::endl;
+        std::cout << "Here's a matrix whose columns are eigenvectors of lap_m \n"
+                  << "corresponding to these eigenvalues:\n"
+                  << eigensolver.eigenvectors() << std::endl;
+        return std::vector<size_t>(0);
     }
     void solver::tmp_get_m(Incidence _incidence)
     {
@@ -42,5 +54,6 @@ namespace sas
         dimension = incidence.cend()->first;
         get_degree_m();
         get_adj_m();
+        allocation();
     }
 } // namespace sas
