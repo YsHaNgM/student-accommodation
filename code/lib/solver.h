@@ -1,6 +1,7 @@
 #ifndef solver_h
 #define solver_h
 
+#include <algorithm>
 #include <Eigen>
 #include "basic_types.h"
 
@@ -12,8 +13,10 @@ namespace sas
         solver() = default;
         ~solver() = default;
         void tmp_get_m(Incidence);
+        std::vector<size_t> allocation();
 
     private:
+        size_t dimension;
         Incidence incidence;
         Eigen::SparseMatrix<int> degree_m;
         Eigen::SparseMatrix<int> adj_m;
