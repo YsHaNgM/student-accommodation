@@ -20,9 +20,9 @@ namespace sas
             getline(file_reader, lined_data);        //get one line, from file_reader, stored in lined_data
             std::stringstream string_in(lined_data); //constructor of string_in,
                                                      //stream act as buffer to input/output string
-            std::pair<int, std::vector<int>> pair;
+            friendship pair;
             string_in >> pair.first;
-            pair.second = std::vector<int>(std::istream_iterator<int>(string_in), {});
+            pair.second = std::vector<int>(std::move(std::istream_iterator<int>(string_in)), {});
             v.insert(pair); //to-do: maybe emplace
         }
 
