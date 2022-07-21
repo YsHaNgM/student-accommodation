@@ -15,11 +15,11 @@ namespace sas
     private:
         std::string file_name;
 
-        incidence v; //(X,y) vector pairs
+        Incidence v; //(X,y) vector pairs
 
     public:
         explicit file_loader_data_creator(std::string);
-        incidence get_data() final;
+        Incidence get_data() final;
     };
 } // namespace sas
 

@@ -83,7 +83,7 @@ endforeach()
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
-include_directories(${CMAKE_SOURCE_DIR}/code/3rd_party/eigen-3.4.0)
+include_directories(${CMAKE_SOURCE_DIR}/code/3rd_party/eigen-3.4.0/Eigen)
 include_directories(${CMAKE_SOURCE_DIR}/code/lib)
 include_directories(${CMAKE_BINARY_DIR})
 

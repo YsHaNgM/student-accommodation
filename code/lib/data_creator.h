@@ -10,7 +10,7 @@ namespace sas
     {
     public:
         virtual ~data_creator() = default;
-        virtual incidence get_data() = 0;
+        virtual Incidence get_data() = 0;
     };
 } // namespace sas
 

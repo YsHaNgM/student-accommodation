@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <memory>
 #include "file_loader_data_creator.h"
+#include "solver.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ int main(int argc, char const *argv[])
             return 1; //exit abnormally
         }
         auto file_loader = make_unique<sas::file_loader_data_creator>(argv[1]);
-        auto FileData = file_loader->get_data();
+        auto file_data = file_loader->get_data();
         // for (const auto it : FileData)
         // {
         //     for (const auto i : it.second)
@@ -33,6 +34,8 @@ int main(int argc, char const *argv[])
         //     }
         //     cout << endl;
         // }
+        auto solver_ptr = make_unique<sas::solver>();
+        solver_ptr->tmp_get_m(file_data);
 
         // if (typeid(FileData) != typeid(sas::PairedVector))
         // {
