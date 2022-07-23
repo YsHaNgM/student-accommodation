@@ -2,13 +2,13 @@
 #define basic_types_h
 
 #include <map>
-#include <vector>
+#include <unordered_set>
 
 //! Single namespace for all code in this package
 namespace sas
 {
-    typedef std::pair<int, std::vector<int>> Friendship;
-    typedef std::map<int, std::vector<int>> Incidence;
+    typedef std::pair<int, std::unordered_set<int>> Friendship;
+    typedef std::map<int, std::unordered_set<int>> Incidence;
 } // namespace sas
 
 #endif
