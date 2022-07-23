@@ -15,6 +15,7 @@ static void show_help(const string &app_name)
          << "\t-n,--normal\t\tNormal equetion solver." << endl
          << "\t-s,--svd\t\tSVD solver." << endl;
 }
+//not in use
 template <typename T>
 std::vector<size_t> ordered(std::vector<T> const &values)
 {

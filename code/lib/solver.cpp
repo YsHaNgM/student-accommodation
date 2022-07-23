@@ -72,10 +72,10 @@ namespace sas
             eigen_vector2 = eigen_vector2 + v;
         }
 
-        fiedler_v = std::vector<float>(eigen_vector2.data(), eigen_vector2.data() + dimension);
+        fiedler_v = std::vector<float>(eigen_vector2.data(), eigen_vector2.data() + dimension); // Can use Eigen::vector
 
         std::vector<size_t> sort_idx(fiedler_v.size());
-        std::iota(sort_idx.begin(), sort_idx.end(), 1);
+        std::iota(sort_idx.begin(), sort_idx.end(), 1); // May need to align with student input i.e. student 2 4 5 7
         auto comparator = [&](auto a, auto b) { return fiedler_v[a - 1] < fiedler_v[b - 1]; };
         std::sort(sort_idx.begin(), sort_idx.end(), comparator);
 
