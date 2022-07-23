@@ -15,6 +15,17 @@ static void show_help(const string &app_name)
          << "\t-n,--normal\t\tNormal equetion solver." << endl
          << "\t-s,--svd\t\tSVD solver." << endl;
 }
+template <typename T>
+std::vector<size_t> ordered(std::vector<T> const &values)
+{
+    std::vector<size_t> indices(values.size());
+    std::iota(begin(indices), end(indices), static_cast<size_t>(0));
+
+    std::sort(
+        begin(indices), end(indices),
+        [&](size_t a, size_t b) { return values[a] <= values[b]; });
+    return indices;
+}
 int main(int argc, char const *argv[])
 {
     try
@@ -34,8 +45,15 @@ int main(int argc, char const *argv[])
         //     }
         //     cout << endl;
         // }
-        auto solver_ptr = make_unique<sas::solver>();
-        solver_ptr->tmp_get_m(file_data);
+        auto solver_ptr = make_unique<sas::solver>(file_data);
+        auto student_order = solver_ptr->allocation();
+
+        // vector<double> v = {0.0, 0.5, 0.5, -0.5, -0.5};
+        // std::sort(v.begin(), v.end());
+
+        for (auto i : student_order)
+            std::cout << i << ' ';
+        std::cout << std::endl;
 
         // if (typeid(FileData) != typeid(sas::PairedVector))
         // {

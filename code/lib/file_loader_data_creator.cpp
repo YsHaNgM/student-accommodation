@@ -20,12 +20,14 @@ namespace sas
             getline(file_reader, lined_data);        //get one line, from file_reader, stored in lined_data
             std::stringstream string_in(lined_data); //constructor of string_in,
                                                      //stream act as buffer to input/output string
-            Friendship pair;
-            string_in >> pair.first;
-            pair.second = std::vector<int>(std::move(std::istream_iterator<int>(string_in)), {});
-            v.insert(pair); //to-do: maybe emplace
+            if (string_in.rdbuf()->in_avail() != 0)
+            {
+                Friendship pair;
+                string_in >> pair.first;
+                pair.second = std::vector<int>(std::move(std::istream_iterator<int>(string_in)), {});
+                v.insert(pair); //to-do: maybe emplace}
+            }
         }
-
         file_reader.close();
         return v;
     }
