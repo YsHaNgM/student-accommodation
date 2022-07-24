@@ -55,15 +55,19 @@ namespace sas
         Eigen::VectorXf eigen_vector2 = eigensolver.eigenvectors().col(idx_eigen_value2);
 
         // For disconnected graph
+        // Number of extra sub graph, each of them is implied by 0 lambda, exclude the first one
         auto disconnected = (eigen_values.array() == 0).count() - 1;
+        // First 0 lambda is the original trivial solution
         auto iter_zero = std::min_element(eigen_values.cbegin(), eigen_values.cend());
         while (disconnected--)
         {
             // Populate each disconnected graph
             iter_zero = std::min_element(++iter_zero, eigen_values.cend());
+            // Corresponding eigen vector
             auto idx_zero_eigen_value = std::distance(eigen_values.cbegin(), iter_zero);
             Eigen::VectorXf zero_eigen_vector = eigensolver.eigenvectors().col(idx_zero_eigen_value);
 
+            // Non zero enter for start of an independent graph
             auto lower_iter = std::find_if_not(zero_eigen_vector.cbegin(), zero_eigen_vector.cend(), [](auto p) { return p == 0; });
             auto lower_idx = std::distance(zero_eigen_vector.cbegin(), lower_iter);
             auto n = std::distance(lower_iter, zero_eigen_vector.cend());
@@ -84,9 +88,6 @@ namespace sas
         std::cout << "The eigenvalues of lap_m are:\n"
                   << eigensolver.eigenvalues() << std::endl;
         std::cout << "The eigenvalue2: " << idx_eigen_value2 << std::endl;
-        for (auto v : sort_idx)
-            std::cout << v << ' ';
-        std::cout << std::endl;
         std::cout << "Here's a matrix whose columns are eigenvectors of lap_m \n"
                   << "corresponding to these eigenvalues:\n"
                   << eigensolver.eigenvectors() << std::endl;
