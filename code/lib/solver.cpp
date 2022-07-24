@@ -28,6 +28,8 @@ namespace sas
                 adj_m.insert(i.first - 1, j - 1) = 1;
         }
         adj_m.makeCompressed();
+        // Make symmetric adjacency matrix from a directed graph
+        adj_m = Eigen::SparseMatrix<int>(adj_m.transpose()).cwiseMax(adj_m);
     }
     std::vector<size_t> solver::allocation()
     {
@@ -35,7 +37,7 @@ namespace sas
         get_adj_m();
 
         lap_m = degree_m - adj_m;
-        std::cout << lap_m.rows() << ' ' << lap_m.cols() << std::endl;
+        // std::cout << lap_m.rows() << ' ' << lap_m.cols() << std::endl;
         std::cout << "Here is the matrix m:\n"
                   << lap_m << std::endl;
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eigensolver(lap_m.cast<float>());
@@ -51,25 +53,25 @@ namespace sas
         std::vector<float> fiedler_v;
         auto idx_eigen_value2 = std::distance(eigen_values.cbegin(), iter);
         Eigen::VectorXf eigen_vector2 = eigensolver.eigenvectors().col(idx_eigen_value2);
-        //temp for disconnected graph
-        if (auto disconnected = (eigen_values.array() == 0).count() - 1)
+
+        // For disconnected graph
+        auto disconnected = (eigen_values.array() == 0).count() - 1;
+        auto iter_zero = std::min_element(eigen_values.cbegin(), eigen_values.cend());
+        while (disconnected--)
         {
-            //disconnected+=1 populate each disconnected graph should be a loop
-            auto iter_zero = std::min_element(eigen_values.cbegin(), eigen_values.cend());
-            auto idx_eigen_value1 = std::distance(eigen_values.cbegin(), iter_zero);
-            Eigen::VectorXf eigen_vector1 = eigensolver.eigenvectors().col(idx_eigen_value1);
+            // Populate each disconnected graph
+            iter_zero = std::min_element(++iter_zero, eigen_values.cend());
+            auto idx_zero_eigen_value = std::distance(eigen_values.cbegin(), iter_zero);
+            Eigen::VectorXf zero_eigen_vector = eigensolver.eigenvectors().col(idx_zero_eigen_value);
 
-            auto lower_iter = std::find(eigen_vector1.cbegin(), eigen_vector1.cend(), 0);
-            auto lower_idx = std::distance(eigen_vector1.cbegin(), lower_iter);
-            auto upper_iter = std::find_if_not(lower_iter, eigen_vector1.cend(), [](auto p) { return p == 0; });
-            auto n = std::distance(lower_iter, upper_iter);
+            auto lower_iter = std::find_if_not(zero_eigen_vector.cbegin(), zero_eigen_vector.cend(), [](auto p) { return p == 0; });
+            auto lower_idx = std::distance(zero_eigen_vector.cbegin(), lower_iter);
+            auto n = std::distance(lower_iter, zero_eigen_vector.cend());
 
-            Eigen::VectorXf v = Eigen::VectorXf::Zero(dimension);
-            v.segment(lower_idx, n).setOnes();
-            std::cout << "v: " << std::endl
-                      << v << std::endl;
-
-            eigen_vector2 = eigen_vector2 + v;
+            // Increase cost weight on each extra sub graph
+            Eigen::VectorXf tmp = Eigen::VectorXf::Zero(dimension);
+            tmp.segment(lower_idx, n).setOnes();
+            eigen_vector2 += tmp;
         }
 
         fiedler_v = std::vector<float>(eigen_vector2.data(), eigen_vector2.data() + dimension); // Can use Eigen::vector
