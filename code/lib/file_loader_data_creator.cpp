@@ -1,5 +1,7 @@
 #include <utility>
 #include "file_loader_data_creator.h"
+//tmp
+#include <iostream>
 
 namespace sas
 {
@@ -25,6 +27,7 @@ namespace sas
                 Friendship pair;
                 string_in >> pair.first;
                 pair.second = std::unordered_set<int>(std::move(std::istream_iterator<int>(string_in)), {});
+
                 v.insert(pair); //to-do: maybe emplace}
             }
         }

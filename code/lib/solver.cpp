@@ -3,17 +3,22 @@
 #include <iostream>
 namespace sas
 {
-    solver::solver(Incidence _incidence) : incidence(std::move(_incidence)), dimension(_incidence.cend()->first) {}
+    solver::solver(Incidence _incidence) : incidence(std::move(_incidence)), dimension(std::prev(_incidence.end())->first) {}
     void solver::get_degree_m()
     {
+        std::cout << "dimension: " << dimension << std::endl;
         degree_m.resize(dimension, dimension);
         degree_m.reserve(dimension);
+        std::cout << degree_m.rows() << ' ' << degree_m.cols() << std::endl;
         for (auto it : incidence)
         {
+            std::cout << "degree: " << it.first << std::endl;
             if (!it.second.empty())
                 degree_m.insert(it.first - 1, it.first - 1) = it.second.size();
         }
         degree_m.makeCompressed();
+        std::cout << "degree_m:\n"
+                  << degree_m << std::endl;
     }
     void solver::get_adj_m()
     {
@@ -30,6 +35,8 @@ namespace sas
         adj_m.makeCompressed();
         // Make symmetric adjacency matrix from a directed graph
         adj_m = Eigen::SparseMatrix<int>(adj_m.transpose()).cwiseMax(adj_m);
+        std::cout << "adj_m:\n"
+                  << adj_m << std::endl;
     }
     std::vector<size_t> solver::allocation()
     {
@@ -59,8 +66,9 @@ namespace sas
         auto disconnected = (eigen_values.array() == 0).count() - 1;
         // First 0 lambda is the original trivial solution
         auto iter_zero = std::min_element(eigen_values.cbegin(), eigen_values.cend());
-        while (disconnected--)
+        while (0 < disconnected--)
         {
+            std::cout << "extra disconnected: " << disconnected << std::endl;
             // Populate each disconnected graph
             iter_zero = std::min_element(++iter_zero, eigen_values.cend());
             // Corresponding eigen vector
@@ -84,6 +92,7 @@ namespace sas
         std::iota(sort_idx.begin(), sort_idx.end(), 1); // May need to align with student input i.e. student 2 4 5 7
         auto comparator = [&](auto a, auto b) { return fiedler_v[a - 1] < fiedler_v[b - 1]; };
         std::sort(sort_idx.begin(), sort_idx.end(), comparator);
+        sort_idx.resize(incidence.size()); // Only number of input students
 
         std::cout << "The eigenvalues of lap_m are:\n"
                   << eigensolver.eigenvalues() << std::endl;
@@ -91,10 +100,6 @@ namespace sas
         std::cout << "Here's a matrix whose columns are eigenvectors of lap_m \n"
                   << "corresponding to these eigenvalues:\n"
                   << eigensolver.eigenvectors() << std::endl;
-        std::cout << "degree_m:\n"
-                  << degree_m << std::endl;
-        std::cout << "adj_m:\n"
-                  << adj_m << std::endl;
         std::cout << "fiedler_v:\n"
                   << eigen_vector2 << std::endl;
 
