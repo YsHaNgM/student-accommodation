@@ -35,8 +35,7 @@ int main(int argc, char const *argv[])
 
         std::cout << "Student allocation: ";
         for (auto i : student_order)
-            std::cout
-                << i << ' ';
+            std::cout << i << ' ';
         std::cout << std::endl;
 
         return 0;

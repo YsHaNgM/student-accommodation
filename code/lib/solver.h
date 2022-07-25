@@ -14,6 +14,8 @@ namespace sas
         solver(Incidence);
         ~solver() = default;
         std::vector<size_t> allocation();
+
+        // For testing
         Eigen::SparseMatrix<int> get_degree_m() { return degree_m; };
         Eigen::SparseMatrix<int> get_adj_m() { return adj_m; };
         Eigen::MatrixXi get_lap_m() { return lap_m; };
