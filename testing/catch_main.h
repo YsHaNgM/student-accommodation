@@ -3,7 +3,7 @@
 #include <sstream>
 #include <numeric>
 
-namespace lia
+namespace sas
 {
   extern int argc;
   extern char **argv;
@@ -13,4 +13,4 @@ namespace lia
     ss >> number;
     return number;
   };
-} // namespace lia
+} // namespace sas

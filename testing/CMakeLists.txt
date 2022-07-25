@@ -2,7 +2,7 @@ set(DATA_DIR ${CMAKE_SOURCE_DIR}/testing/data)
 set(TMP_DIR ${CMAKE_BINARY_DIR}/testing/temporary)
 
 set(TEST_CASES
-  
+  solver_test
 )
 
 foreach(_test_case ${TEST_CASES})
@@ -17,7 +17,5 @@ endforeach()
 # Dont forget its:  add_test(<test name (globally unique) > <exe name> <argument1> <argument2>
 ##################################################################################################
 
-# add_test(addition_test ${EXECUTABLE_OUTPUT_PATH}/addition_test)
-# add_test(multiplication ${EXECUTABLE_OUTPUT_PATH}/multiplication_test)
-# add_test(subtraction ${EXECUTABLE_OUTPUT_PATH}/subtraction_test)
+add_test(solver ${EXECUTABLE_OUTPUT_PATH}/solver_test)
 

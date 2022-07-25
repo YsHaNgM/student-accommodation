@@ -15,7 +15,7 @@ namespace sas
     private:
         std::string file_name;
 
-        Incidence v; //(X,y) vector pairs
+        Incidence v; // Student friends set
 
     public:
         explicit file_loader_data_creator(std::string);

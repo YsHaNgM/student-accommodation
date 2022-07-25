@@ -1,26 +1,19 @@
 #include "solver.h"
-// temp
-#include <iostream>
 namespace sas
 {
     solver::solver(Incidence _incidence) : incidence(std::move(_incidence)), dimension(std::prev(_incidence.end())->first) {}
-    void solver::get_degree_m()
+    void solver::set_degree_m()
     {
-        std::cout << "dimension: " << dimension << std::endl;
         degree_m.resize(dimension, dimension);
         degree_m.reserve(dimension);
-        std::cout << degree_m.rows() << ' ' << degree_m.cols() << std::endl;
         for (auto it : incidence)
         {
-            std::cout << "degree: " << it.first << std::endl;
             if (!it.second.empty())
                 degree_m.insert(it.first - 1, it.first - 1) = it.second.size();
         }
         degree_m.makeCompressed();
-        std::cout << "degree_m:\n"
-                  << degree_m << std::endl;
     }
-    void solver::get_adj_m()
+    void solver::set_adj_m()
     {
         adj_m.resize(dimension, dimension);
         auto entries = std::count_if(std::cbegin(incidence),
@@ -35,18 +28,13 @@ namespace sas
         adj_m.makeCompressed();
         // Make symmetric adjacency matrix from a directed graph
         adj_m = Eigen::SparseMatrix<int>(adj_m.transpose()).cwiseMax(adj_m);
-        std::cout << "adj_m:\n"
-                  << adj_m << std::endl;
     }
     std::vector<size_t> solver::allocation()
     {
-        get_degree_m();
-        get_adj_m();
+        set_degree_m();
+        set_adj_m();
 
         lap_m = degree_m - adj_m;
-        // std::cout << lap_m.rows() << ' ' << lap_m.cols() << std::endl;
-        std::cout << "Here is the matrix m:\n"
-                  << lap_m << std::endl;
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eigensolver(lap_m.cast<float>());
         if (eigensolver.info() != Eigen::Success)
             abort();
@@ -68,7 +56,6 @@ namespace sas
         auto iter_zero = std::min_element(eigen_values.cbegin(), eigen_values.cend());
         while (0 < disconnected--)
         {
-            std::cout << "extra disconnected: " << disconnected << std::endl;
             // Populate each disconnected graph
             iter_zero = std::min_element(++iter_zero, eigen_values.cend());
             // Corresponding eigen vector
@@ -93,15 +80,6 @@ namespace sas
         auto comparator = [&](auto a, auto b) { return fiedler_v[a - 1] < fiedler_v[b - 1]; };
         std::sort(sort_idx.begin(), sort_idx.end(), comparator);
         sort_idx.resize(incidence.size()); // Only number of input students
-
-        std::cout << "The eigenvalues of lap_m are:\n"
-                  << eigensolver.eigenvalues() << std::endl;
-        std::cout << "The eigenvalue2: " << idx_eigen_value2 << std::endl;
-        std::cout << "Here's a matrix whose columns are eigenvectors of lap_m \n"
-                  << "corresponding to these eigenvalues:\n"
-                  << eigensolver.eigenvectors() << std::endl;
-        std::cout << "fiedler_v:\n"
-                  << eigen_vector2 << std::endl;
 
         return sort_idx;
     }

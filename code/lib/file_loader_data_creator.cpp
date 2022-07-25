@@ -1,7 +1,5 @@
 #include <utility>
 #include "file_loader_data_creator.h"
-//tmp
-#include <iostream>
 
 namespace sas
 {

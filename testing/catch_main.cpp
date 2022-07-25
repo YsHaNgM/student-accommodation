@@ -3,7 +3,7 @@
 #include "catch_main.h"
 
 // Global! Only do this in a private test harness.
-namespace lia
+namespace sas
 {
     int argc;
     char **argv;
@@ -11,8 +11,8 @@ namespace lia
 
 int main(int argc, char *const argv[])
 {
-    lia::argc = argc;
-    lia::argv = const_cast<char **>(argv);
+    sas::argc = argc;
+    sas::argv = const_cast<char **>(argv);
 
     Catch::Session session; // There must be exactly once instance
 
