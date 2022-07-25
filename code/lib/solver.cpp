@@ -1,7 +1,8 @@
 #include "solver.h"
+
 namespace sas
 {
-    solver::solver(Incidence _incidence) : incidence(std::move(_incidence)), dimension(std::prev(_incidence.end())->first) {}
+    solver::solver(Incidence _incidence) : incidence(std::move(_incidence)), dimension(1 + std::prev(_incidence.end())->first) {}
     void solver::set_degree_m()
     {
         degree_m.resize(dimension, dimension);
@@ -9,7 +10,7 @@ namespace sas
         for (auto it : incidence)
         {
             if (!it.second.empty())
-                degree_m.insert(it.first - 1, it.first - 1) = it.second.size();
+                degree_m.insert(it.first, it.first) = it.second.size();
         }
         degree_m.makeCompressed();
     }
@@ -23,7 +24,7 @@ namespace sas
         for (auto i : incidence)
         {
             for (auto j : i.second)
-                adj_m.insert(i.first - 1, j - 1) = 1;
+                adj_m.insert(i.first, j) = 1;
         }
         adj_m.makeCompressed();
         // Make symmetric adjacency matrix from a directed graph
@@ -77,8 +78,8 @@ namespace sas
 
         // Sort index regarding to entries of fiedler vector
         std::vector<size_t> sort_idx(fiedler_v.size());
-        std::iota(sort_idx.begin(), sort_idx.end(), 1); // May need to align with student input i.e. student 2 4 5 7
-        auto comparator = [&](auto a, auto b) { return fiedler_v[a - 1] < fiedler_v[b - 1]; };
+        std::iota(sort_idx.begin(), sort_idx.end(), 0); // May need to align with student input i.e. student 2 4 5 7
+        auto comparator = [&](auto a, auto b) { return fiedler_v[a] < fiedler_v[b]; };
         std::sort(sort_idx.begin(), sort_idx.end(), comparator);
         sort_idx.resize(incidence.size()); // Only number of input students
 
