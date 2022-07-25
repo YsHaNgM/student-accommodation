@@ -7,7 +7,7 @@ namespace sas
 {
   extern int argc;
   extern char **argv;
-  auto RoundMe = [](auto number, auto dPlaces) {
+  inline auto round_me = [](auto number, auto dPlaces) {
     std::stringstream ss;
     ss << std::fixed << std::setprecision(dPlaces) << number;
     ss >> number;
