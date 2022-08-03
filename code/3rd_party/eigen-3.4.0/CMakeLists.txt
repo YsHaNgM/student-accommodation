@@ -482,7 +482,7 @@ if(EIGEN_BUILD_DOC)
 endif()
 
 
-option(BUILD_TESTING "Enable creation of Eigen tests." ON)
+option(BUILD_TESTING "Enable creation of Eigen tests." OFF)
 if(BUILD_TESTING)
   include(EigenConfigureTesting)
 

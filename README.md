@@ -5,7 +5,7 @@ Graph optimisation problem - spectral clustering, find the allocation of vertice
 
 ## Build Instructions
 
-[GCC 9.4](https://gcc.gnu.org/gcc-9/), [Clang 10](http://releases.llvm.org/10.0.0/tools/clang/docs/) or newer version need to be used.
+[GCC 9.4](https://gcc.gnu.org/gcc-9/), [Clang 10](http://releases.llvm.org/10.0.0/tools/clang/docs/) or newer version need to be used. Install cmake (or cmake-curses-gui/ccmake) and build-essential (any C dev bundle on your platform).
 
 
 ```
