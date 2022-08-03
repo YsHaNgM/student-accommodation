@@ -17,9 +17,12 @@ namespace sas
     void solver::set_adj_m()
     {
         adj_m.resize(dimension, dimension);
-        auto entries = std::count_if(std::cbegin(incidence),
-                                     std::cend(incidence),
-                                     [](auto) { return true; });
+        size_t entries = 0;
+        for (auto it : incidence)
+        {
+            entries += it.second.size();
+        }
+        
         adj_m.reserve(entries);
         for (auto i : incidence)
         {
